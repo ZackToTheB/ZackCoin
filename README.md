@@ -1,0 +1,2 @@
+# ZackCoin
+Bitcoin clone basically
