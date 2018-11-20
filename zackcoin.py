@@ -1,10 +1,7 @@
-#0.1.2
+#0.1.3
 
 import hashlib as hash_
 import datetime
-
-global symbol
-symbol = "ZBC"
 
 class Transaction:
     def __init__(self, fromAddress, toAddress, amount):
@@ -44,7 +41,9 @@ class Block:
         print("BLOCK MINED:", self.hash)
 
 class Blockchain:
-    def __init__(self):
+    def __init__(self, name, symbol):
+        self.name = name
+        self.symbol = symbol
         self.chain = []
         self.difficulty = 2
         self.pendingTransactions = []
@@ -59,7 +58,7 @@ class Blockchain:
         return string
 
     def createGenesisBlock(self):
-        return Block("04/03/2018", [Transaction("genesis", "block", "0")], "*genesis block*")
+        return Block(dateNow(), [Transaction("genesis", "block", "0")], "*genesis block*")
 
     def getLatestBlock(self):
         return self.chain[-1]
@@ -111,20 +110,20 @@ def dateNow(UK = True): #defaults to UK date format, for US date format pass thr
         dString = str(d.month)+"/"+str(d.day)+"/"+str(d.year)
     return dString
 
-ZackCoin = Blockchain()
+ZackCoin = Blockchain("ZackCoin", "ZBC")
 
 ZackCoin.createTransaction(Transaction("address1", "address2", 100))
 ZackCoin.createTransaction(Transaction("address2", "address1", 50))
 
 print("\nStarting the miner...")
-ZackCoin.minePendingTransactions("xaviers-address")
+ZackCoin.minePendingTransactions("shteves-address")
 
-print("\nBalance of xavier is", symbol, ZackCoin.getBalanceOfAddress("xaviers-address"))
+print("\nBalance of Shteve is", ZackCoin.symbol, ZackCoin.getBalanceOfAddress("shteves-address"))
 
 print("\nStarting the miner again...")
-ZackCoin.minePendingTransactions("xaviers-address")
+ZackCoin.minePendingTransactions("shteves-address")
 
-print("\nBalance of xavier is", symbol, ZackCoin.getBalanceOfAddress("xaviers-address"))
+print("\nBalance of Shteve is", ZackCoin.symbol, ZackCoin.getBalanceOfAddress("shteves-address"))
 
 
         
