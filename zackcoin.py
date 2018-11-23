@@ -78,9 +78,7 @@ class Blockchain:
     def getBalanceOfAddress(self, address):
         balance = 0
         for block in self.chain:
-            #print(block)
             for trans in block.transactions:
-                #print("Trans: ", trans)
                 if trans.fromAddress == address:
                     balance -= trans.amount
 
