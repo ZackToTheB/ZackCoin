@@ -1,4 +1,4 @@
-#0.1.3
+#0.2.0
 
 import hashlib as hash_
 import datetime
@@ -73,6 +73,8 @@ class Blockchain:
         self.pendingTransactions = [Transaction(None, miningRewardAddress, self.miningReward)]
 
     def createTransaction(self, transaction):
+        if transaction.amount > self.getBalanceOfAddress(transaction.fromAddress):
+            return "Transaction Failed: Insufficient Funds."
         self.pendingTransactions.append(transaction)
 
     def getBalanceOfAddress(self, address):
@@ -116,12 +118,12 @@ ZackCoin.createTransaction(Transaction("address2", "address1", 50))
 print("\nStarting the miner...")
 ZackCoin.minePendingTransactions("shteves-address")
 
-print("\nBalance of Shteve is", ZackCoin.symbol, ZackCoin.getBalanceOfAddress("shteves-address"))
+print("\nBalance of Shteve's address is {} {}".format(ZackCoin.getBalanceOfAddress("shteves-address"), ZackCoin.symbol))
 
 print("\nStarting the miner again...")
 ZackCoin.minePendingTransactions("shteves-address")
 
-print("\nBalance of Shteve is", ZackCoin.symbol, ZackCoin.getBalanceOfAddress("shteves-address"))
+print("\nBalance of Shteve's address is {} {}".format(ZackCoin.getBalanceOfAddress("shteves-address"), ZackCoin.symbol))
 
 
         
