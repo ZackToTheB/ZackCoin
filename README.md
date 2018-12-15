@@ -1,2 +1,2 @@
 # ZackCoin
-Bitcoin clone basically
+Bitcoin clone basically - made in Python 3.
