@@ -112,16 +112,16 @@ def dateNow(UK = True): #defaults to UK date format, for US date format pass thr
 
 ZackCoin = Blockchain("ZackCoin", "ZBC")
 
-ZackCoin.createTransaction(Transaction("address1", "address2", 100))
-ZackCoin.createTransaction(Transaction("address2", "address1", 50))
+for i in range(10):
+    ZackCoin.minePendingTransactions("init-address")
 
-print("\nStarting the miner...")
-ZackCoin.minePendingTransactions("shteves-address")
+print("\nBalance of initial address is {} {}".format(ZackCoin.getBalanceOfAddress("init-address"), ZackCoin._symbol))
+
+ZackCoin.createTransaction(Transaction("init-address", "shteves-address", 100))
 
 print("\nBalance of Shteve's address is {} {}".format(ZackCoin.getBalanceOfAddress("shteves-address"), ZackCoin._symbol))
 
-print("\nStarting the miner again...")
-ZackCoin.minePendingTransactions("shteves-address")
+ZackCoin.minePendingTransactions("miner-address")
 
 print("\nBalance of Shteve's address is {} {}".format(ZackCoin.getBalanceOfAddress("shteves-address"), ZackCoin._symbol))
 
