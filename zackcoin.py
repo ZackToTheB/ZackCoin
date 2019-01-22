@@ -1,5 +1,3 @@
-#0.2.0
-
 import hashlib as hash_
 import datetime
 
