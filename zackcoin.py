@@ -8,9 +8,9 @@ class Transaction:
         self._amount = amount
         
     def __str__(self):
-        string = "from: " + self._fromAddress + "\n"
-        string += "to: " + self._toAddress + "\n"
-        string += "ZBC: " + str(self._amount) + "\n"
+        string = "from: {}\n".format(self._fromAddress)
+        string += "to: {}\n".format(self._toAddress)
+        string += "amount: {}\n".format(self._amount)
         return string
 
 class Block:
@@ -19,7 +19,7 @@ class Block:
         self.__timestamp = timestamp
         self._transactions = transactions
         self.__nonce = 0
-        self._hash = self.calculateHash()
+        self._hash = self.calculate_hash()
 
     def __str__(self):
         string = "timestamp: " + self.__timestamp + "\n"
@@ -28,13 +28,13 @@ class Block:
         string += "hash: " + self._hash + "\n"
         return string
 
-    def calculateHash(self):
+    def calculate_hash(self):
         return hash_.sha256((self._previousHash + self.__timestamp + str(self._transactions) + str(self.__nonce)).encode()).hexdigest()
 
-    def mineBlock(self, difficulty):
+    def mine_block(self, difficulty):
         while self._hash[0:difficulty] != "0"*difficulty:
             self.__nonce += 1
-            self._hash = self.calculateHash()
+            self._hash = self.calculate_hash()
 
         print("BLOCK MINED:", self._hash)
 
@@ -47,7 +47,7 @@ class Blockchain:
         self.__pendingTransactions = []
         self.__miningReward = 100
 
-        self.__chain.append(self.createGenesisBlock())
+        self.__chain.append(self._create_genesis_block())
 
     def __str__(self):
         string = "chain \n=====\n"
@@ -55,27 +55,30 @@ class Blockchain:
             string += str(block) + "-----\n"
         return string
 
-    def createGenesisBlock(self):
-        return Block(dateNow(), [Transaction("genesis", "block", "0")], "*genesis block*")
+    def _create_genesis_block(self):
+        return Block(get_date(), [Transaction("genesis", "block", "0")], "*genesis block*")
 
-    def getLatestBlock(self):
+    def get_latest_block(self):
         return self.__chain[-1]
 
-    def minePendingTransactions(self, miningRewardAddress):
-        block = Block(dateNow(), self.__pendingTransactions, self.getLatestBlock()._hash)
-        block.mineBlock(self.__difficulty)
+    def get_chain(self):
+        return self.__chain
+    
+    def mine_pending_transactions(self, miningRewardAddress):
+        block = Block(get_date(), self.__pendingTransactions, self.get_latest_block()._hash)
+        block.mine_block(self.__difficulty)
 
         print("Block successfully mined!")
         self.__chain.append(block)
 
         self.__pendingTransactions = [Transaction(None, miningRewardAddress, self.__miningReward)]
 
-    def createTransaction(self, transaction):
-        if transaction._amount > self.getBalanceOfAddress(transaction._fromAddress):
+    def create_transaction(self, transaction):
+        if transaction._amount > self.get_balance_of_address(transaction._fromAddress):
             return "Transaction Failed: Insufficient Funds."
         self.__pendingTransactions.append(transaction)
 
-    def getBalanceOfAddress(self, address):
+    def get_balance_of_address(self, address):
         balance = 0
         for block in self.__chain:
             for trans in block._transactions:
@@ -87,7 +90,7 @@ class Blockchain:
 
         return balance
 
-    def isChainValid(self):
+    def is_chain_valid(self):
         for i in range(1, len(self.__chain)):
             currentBlock = self.__chain[i]
             previousBlock = self.__chain[i-1]
@@ -100,7 +103,7 @@ class Blockchain:
 
         return True
 
-def dateNow(UK = True): #defaults to UK date format, for US date format pass through False.
+def get_date(UK = True): #defaults to UK date format, for US date format pass through False.
     d = datetime.datetime.now()
     if UK:
         dString = str(d.day)+"/"+str(d.month)+"/"+str(d.year)
@@ -111,17 +114,17 @@ def dateNow(UK = True): #defaults to UK date format, for US date format pass thr
 ZackCoin = Blockchain("ZackCoin", "ZBC")
 
 for i in range(10):
-    ZackCoin.minePendingTransactions("init-address")
+    ZackCoin.mine_pending_transactions("init-address")
 
-print("\nBalance of initial address is {} {}".format(ZackCoin.getBalanceOfAddress("init-address"), ZackCoin._symbol))
+print("\nBalance of initial address is {} {}".format(ZackCoin.get_balance_of_address("init-address"), ZackCoin._symbol))
 
-ZackCoin.createTransaction(Transaction("init-address", "shteves-address", 100))
+ZackCoin.create_transaction(Transaction("init-address", "shteves-address", 100))
 
-print("\nBalance of Shteve's address is {} {}".format(ZackCoin.getBalanceOfAddress("shteves-address"), ZackCoin._symbol))
+print("\nBalance of Shteve's address is {} {}".format(ZackCoin.get_balance_of_address("shteves-address"), ZackCoin._symbol))
 
-ZackCoin.minePendingTransactions("miner-address")
+ZackCoin.mine_pending_transactions("miner-address")
 
-print("\nBalance of Shteve's address is {} {}".format(ZackCoin.getBalanceOfAddress("shteves-address"), ZackCoin._symbol))
+print("\nBalance of Shteve's address is {} {}".format(ZackCoin.get_balance_of_address("shteves-address"), ZackCoin._symbol))
 
 
         
