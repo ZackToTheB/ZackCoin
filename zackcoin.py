@@ -53,6 +53,7 @@ class Blockchain:
         string = "chain \n=====\n"
         for block in self.__chain:
             string += str(block) + "-----\n"
+            
         return string
 
     def _create_genesis_block(self):
@@ -63,6 +64,12 @@ class Blockchain:
 
     def get_chain(self):
         return self.__chain
+
+    def get_difficulty(self):
+        return self.__difficulty
+
+    def set_difficulty(self, difficulty):
+        self.__difficulty = difficulty
     
     def mine_pending_transactions(self, miningRewardAddress):
         block = Block(get_date(), self.__pendingTransactions, self.get_latest_block()._hash)
@@ -103,6 +110,7 @@ class Blockchain:
 
         return True
 
+
 def get_date(UK = True): #defaults to UK date format, for US date format pass through False.
     d = datetime.datetime.now()
     if UK:
@@ -110,6 +118,7 @@ def get_date(UK = True): #defaults to UK date format, for US date format pass th
     else:
         dString = str(d.month)+"/"+str(d.day)+"/"+str(d.year)
     return dString
+
 
 ZackCoin = Blockchain("ZackCoin", "ZBC")
 
